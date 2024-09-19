@@ -23,7 +23,7 @@ kotlin {
     val commonTarget = when {
         hostOs == "Mac OS X" -> macosArm64("common")
         hostOs == "Linux" && hostArch == "aarch64" -> linuxArm64("common")
-        hostOs == "Linux" && hostArch == "amd64" -> linuxX64("common")
+        hostOs == "Linux" && hostArch == "amd64" -> linuxArm64("common")
         hostOs.startsWith("Windows") -> mingwX64("common")
         else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
     }

@@ -1,0 +1,38 @@
+name: Build binary
+
+on:
+  push:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        machine: [ubuntu-latest, self-hosted-arm64]
+    runs-on: ${{ matrix.machine }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
+      - uses: actions/cache@v4
+        with:
+          path: "/home/runner/.konan"
+          key: ${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}
+      - name: Install dependencies
+        run: |
+          sudo apt -y update
+          sudo apt -y install libcurl4-openssl-dev
+      - name: Build with Gradle
+        run: ./gradlew commonBinaries
+      - name: Move and apply correct permissions to binary
+        run: |
+          cp build/bin/common/releaseExecutable/slack-notifier-cli.kexe ./slack-notifier-cli-${{ runner.arch }}
+          chmod +x ./slack-notifier-cli-${{ runner.arch }}
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: slack-notifier-cli-${{ runner.arch }}
+          path: slack-notifier-cli-${{ runner.arch }}
