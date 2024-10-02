@@ -1,0 +1,77 @@
+name: Integration test
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
+      - uses: actions/cache@v4
+        with:
+          path: "/home/runner/.konan"
+          key: ${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}
+      - name: Install dependencies
+        run: |
+          sudo apt -y update
+          sudo apt -y install libcurl4-openssl-dev
+      - name: Build with Gradle
+        run: ./gradlew commonBinaries
+      - name: Move and apply correct permissions to binary
+        run: |
+          cp build/bin/common/releaseExecutable/slack-notifier-cli.kexe ./slack-notifier-cli
+          chmod +x ./slack-notifier-cli
+      - name: Run slack notifier cli first time (updating)
+        id: slack-notifier-updating
+        env:
+          PUBLISH_SLACK_JOB_TYPE: "build"
+          PUBLISH_SLACK_JOB_STATUS: "progressing"
+          PUBLISH_SLACK_SERVICE_NAME: "anni"
+          PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_CHANNEL_ID: "C07MYE8QV98"
+        run: ./slack-notifier-cli
+        shell: bash
+      - name: Run slack notifier cli second time (updating)
+        id: slack-notifier
+        env:
+          PUBLISH_SLACK_JOB_TYPE: "build"
+          PUBLISH_SLACK_JOB_STATUS: "progressing"
+          PUBLISH_SLACK_SERVICE_NAME: "anni"
+          PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_CHANNEL_ID: "C07MYE8QV98"
+          SLACK_MESSAGE_ID: ${{ steps.slack-notifier-updating.outputs.slack-message-id }}
+        run: ./slack-notifier-cli
+        shell: bash
+      - name: Run slack notifier cli first time (appending)
+        id: slack-notifier-append
+        env:
+          PUBLISH_SLACK_JOB_TYPE: "build"
+          PUBLISH_SLACK_JOB_STATUS: "progressing"
+          PUBLISH_SLACK_SERVICE_NAME: "anni"
+          PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_CHANNEL_ID: "C07MYE8QV98"
+        run: ./slack-notifier-cli
+        shell: bash
+      - name: Run slack notifier cli second time (appending)
+        id: slack-notifier
+        env:
+          PUBLISH_SLACK_JOB_TYPE: "build"
+          PUBLISH_SLACK_JOB_STATUS: "progressing"
+          PUBLISH_SLACK_SERVICE_NAME: "anni"
+          PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_CHANNEL_ID: "C07MYE8QV98"
+          SLACK_MESSAGE_ID: ${{ steps.slack-notifier-appending.outputs.slack-message-id }}
+          APPEND_STATUS_UPDATES: "true"
+        run: ./slack-notifier-cli
+        shell: bash
