@@ -3,6 +3,11 @@ name: Integration test
 on:
   push:
 
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: write # This is required for pushing tags and creating releases
+  actions: read # This is required for 8398a7/action-slack
+
 jobs:
   build:
     runs-on: ubuntu-latest
