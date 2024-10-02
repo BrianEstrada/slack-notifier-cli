@@ -35,7 +35,7 @@ jobs:
           PUBLISH_SLACK_JOB_STATUS: "progress"
           PUBLISH_SLACK_SERVICE_NAME: "anni"
           PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
-          SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
           SLACK_CHANNEL_ID: "C07MYE8QV98"
         run: ./slack-notifier-cli
         shell: bash
@@ -45,7 +45,7 @@ jobs:
           PUBLISH_SLACK_JOB_STATUS: "success"
           PUBLISH_SLACK_SERVICE_NAME: "anni"
           PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
-          SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
           SLACK_CHANNEL_ID: "C07MYE8QV98"
           SLACK_MESSAGE_ID: ${{ steps.slack-notifier-updating.outputs.slack-message-id }}
         run: ./slack-notifier-cli
@@ -57,7 +57,7 @@ jobs:
           PUBLISH_SLACK_JOB_STATUS: "progress"
           PUBLISH_SLACK_SERVICE_NAME: "anni"
           PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
-          SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
           SLACK_CHANNEL_ID: "C07MYE8QV98"
         run: ./slack-notifier-cli
         shell: bash
@@ -67,7 +67,7 @@ jobs:
           PUBLISH_SLACK_JOB_STATUS: "success"
           PUBLISH_SLACK_SERVICE_NAME: "anni"
           PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
-          SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
           SLACK_CHANNEL_ID: "C07MYE8QV98"
           SLACK_MESSAGE_ID: ${{ steps.slack-notifier-appending.outputs.slack-message-id }}
           APPEND_STATUS_UPDATES: "true"
