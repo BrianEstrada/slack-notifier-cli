@@ -3,55 +3,59 @@ name: Integration test
 on:
   push:
 
-permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: write # This is required for pushing tags and creating releases
-  actions: read # This is required for 8398a7/action-slack
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      #      - uses: actions/checkout@v4
+      #      - name: Set up JDK
+      #        uses: actions/setup-java@v4
+      #        with:
+      #          java-version: '17'
+      #          distribution: 'adopt'
+      #          cache: 'gradle'
+      #      - uses: actions/cache@v4
+      #        with:
+      #          path: "/home/runner/.konan"
+      #          key: ${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}
+      #      - name: Install dependencies
+      #        run: |
+      #          sudo apt -y update
+      #          sudo apt -y install libcurl4-openssl-dev
+      #      - name: Build with Gradle
+      #        run: ./gradlew commonBinaries
+      #      - name: Move and apply correct permissions to binary
+      #        run: |
+      #          cp build/bin/common/releaseExecutable/slack-notifier-cli.kexe ./slack-notifier-cli
+      #          chmod +x ./slack-notifier-cli
+      - name: Publish progress message to slack
+        uses: monta-app/slack-notifier-cli-action@main
         with:
-          java-version: '17'
-          distribution: 'adopt'
-          cache: 'gradle'
-      - uses: actions/cache@v4
-        with:
-          path: "/home/runner/.konan"
-          key: ${{ runner.os }}-${{ hashFiles('**/build.gradle.kts') }}
-      - name: Install dependencies
-        run: |
-          sudo apt -y update
-          sudo apt -y install libcurl4-openssl-dev
-      - name: Build with Gradle
-        run: ./gradlew commonBinaries
-      - name: Move and apply correct permissions to binary
-        run: |
-          cp build/bin/common/releaseExecutable/slack-notifier-cli.kexe ./slack-notifier-cli
-          chmod +x ./slack-notifier-cli
-      - name: Run slack notifier cli first time (updating)
-        id: slack-notifier-updating
-        env:
-          PUBLISH_SLACK_JOB_TYPE: "build"
-          PUBLISH_SLACK_JOB_STATUS: "progress"
-          PUBLISH_SLACK_SERVICE_NAME: "anni"
-          PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
-          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
-          SLACK_CHANNEL_ID: "C07MYE8QV98"
-        run: ./slack-notifier-cli
-        shell: bash
-      - name: Run slack notifier cli second time (updating)
-        env:
-          PUBLISH_SLACK_JOB_TYPE: "build"
-          PUBLISH_SLACK_JOB_STATUS: "success"
-          PUBLISH_SLACK_SERVICE_NAME: "anni"
-          PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
-          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
-          SLACK_CHANNEL_ID: "C07MYE8QV98"
-          SLACK_MESSAGE_ID: ${{ steps.slack-notifier-updating.outputs.slack-message-id }}
-        run: ./slack-notifier-cli
-        shell: bash
+          job-type: "build"
+          job-status: "success"
+          service-name: "anni"
+          service-emoji: "☕️"
+          slack-app-token: ${{ secrets.SLACK_APP_TOKEN }}
+          slack-channel-id: "C07MYE8QV98"
+#      - name: Run slack notifier cli first time (updating)
+#        id: slack-notifier-updating
+#        env:
+#          PUBLISH_SLACK_JOB_TYPE: "build"
+#          PUBLISH_SLACK_JOB_STATUS: "progress"
+#          PUBLISH_SLACK_SERVICE_NAME: "anni"
+#          PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
+#          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
+#          SLACK_CHANNEL_ID: "C07MYE8QV98"
+#        run: ./slack-notifier-cli
+#        shell: bash
+#      - name: Run slack notifier cli second time (updating)
+#        env:
+#          PUBLISH_SLACK_JOB_TYPE: "build"
+#          PUBLISH_SLACK_JOB_STATUS: "success"
+#          PUBLISH_SLACK_SERVICE_NAME: "anni"
+#          PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
+#          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
+#          SLACK_CHANNEL_ID: "C07MYE8QV98"
+#          SLACK_MESSAGE_ID: ${{ steps.slack-notifier-updating.outputs.slack-message-id }}
+#        run: ./slack-notifier-cli
+#        shell: bash
