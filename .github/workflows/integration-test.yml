@@ -28,6 +28,11 @@ jobs:
       #        run: |
       #          cp build/bin/common/releaseExecutable/slack-notifier-cli.kexe ./slack-notifier-cli
       #          chmod +x ./slack-notifier-cli
+      - name: "check is SLACK_APP_TOKEN exists"
+        env:
+          super_secret: ${{ secrets.SLACK_APP_TOKEN }}
+        if: ${{ env.super_secret == '' }}
+        run: 'echo "echo the secret \"SLACK_APP_TOKEN\" has not been made;"
       - name: Publish progress message to slack
         uses: monta-app/slack-notifier-cli-action@main
         with:
