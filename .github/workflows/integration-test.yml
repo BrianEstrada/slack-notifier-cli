@@ -32,7 +32,7 @@ jobs:
         id: slack-notifier-updating
         env:
           PUBLISH_SLACK_JOB_TYPE: "build"
-          PUBLISH_SLACK_JOB_STATUS: "progressing"
+          PUBLISH_SLACK_JOB_STATUS: "progress"
           PUBLISH_SLACK_SERVICE_NAME: "anni"
           PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
           SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
       - name: Run slack notifier cli second time (updating)
         env:
           PUBLISH_SLACK_JOB_TYPE: "build"
-          PUBLISH_SLACK_JOB_STATUS: "progressing"
+          PUBLISH_SLACK_JOB_STATUS: "success"
           PUBLISH_SLACK_SERVICE_NAME: "anni"
           PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
           SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
@@ -54,7 +54,7 @@ jobs:
         id: slack-notifier-append
         env:
           PUBLISH_SLACK_JOB_TYPE: "build"
-          PUBLISH_SLACK_JOB_STATUS: "progressing"
+          PUBLISH_SLACK_JOB_STATUS: "progress"
           PUBLISH_SLACK_SERVICE_NAME: "anni"
           PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
           SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
@@ -64,7 +64,7 @@ jobs:
       - name: Run slack notifier cli second time (appending)
         env:
           PUBLISH_SLACK_JOB_TYPE: "build"
-          PUBLISH_SLACK_JOB_STATUS: "progressing"
+          PUBLISH_SLACK_JOB_STATUS: "success"
           PUBLISH_SLACK_SERVICE_NAME: "anni"
           PUBLISH_SLACK_SERVICE_EMOJI: "☕️"
           SLACK_APP_TOKEN: ${{ secrets.SLACK_TOKEN }}
