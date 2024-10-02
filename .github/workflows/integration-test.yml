@@ -40,7 +40,6 @@ jobs:
         run: ./slack-notifier-cli
         shell: bash
       - name: Run slack notifier cli second time (updating)
-        id: slack-notifier
         env:
           PUBLISH_SLACK_JOB_TYPE: "build"
           PUBLISH_SLACK_JOB_STATUS: "progressing"
@@ -63,7 +62,6 @@ jobs:
         run: ./slack-notifier-cli
         shell: bash
       - name: Run slack notifier cli second time (appending)
-        id: slack-notifier
         env:
           PUBLISH_SLACK_JOB_TYPE: "build"
           PUBLISH_SLACK_JOB_STATUS: "progressing"
